@@ -13,7 +13,7 @@ import (
 
 var version = "0.1.0"
 
-func render(input string, prefix string, postfix string) {
+func get_text(input string, prefix string, postfix string) []string {
 	lines := []string{prefix, prefix}
 	input = strings.ToLower(input)
 	for i, r := range input {
@@ -30,6 +30,12 @@ func render(input string, prefix string, postfix string) {
 	}
 	lines[0] += postfix
 	lines[1] += postfix
+
+	return lines
+}
+
+func render(input string, prefix string, postfix string) {
+	lines := get_text(input, prefix, postfix)
 	fmt.Println(lines[0])
 	fmt.Println(lines[1])
 }
