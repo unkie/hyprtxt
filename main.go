@@ -13,8 +13,8 @@ import (
 
 var version = "0.1.0"
 
-func render(input string) {
-	lines := []string{"", ""}
+func render(input string, prefix string, postfix string) {
+	lines := []string{prefix, prefix}
 	input = strings.ToLower(input)
 	for i, r := range input {
 		glyph, ok := font[r]
@@ -28,6 +28,8 @@ func render(input string) {
 			lines[1] += " "
 		}
 	}
+	lines[0] += postfix
+	lines[1] += postfix
 	fmt.Println(lines[0])
 	fmt.Println(lines[1])
 }
@@ -140,21 +142,27 @@ hyprfont font. All input is converted to lowercase.
 Unsupported characters are omitted in the output.
 
 Options:
-    -figlet
-        Output font in figlet .flf format
-    -missing
-        Show unsupported characters in input
-    -charset
-        Print the supported character in ASCII
-    -examples
-        Print the supported characters in hyprfont
-    -version
-        Show version info
-    -help
-        Show this help`)
+	-prefix <text>
+		Prefix each output line.
+	-postfix <text>
+		Postfix each output line.
+	-figlet
+		Output font in figlet .flf format
+	-missing
+		Show unsupported characters in input
+	-charset
+		Print the supported character in ASCII
+	-examples
+		Print the supported characters in hyprfont
+	-version
+		Show version info
+	-help
+		Show this help`)
 }
 
 func main() {
+	prefix_flag := flag.String("prefix", "", "")
+	postfix_flag := flag.String("postfix", "", "")
 	show_flf := flag.Bool("figlet", false, "")
 	show_missing := flag.Bool("missing", false, "")
 	show_charset := flag.Bool("charset", false, "")
@@ -181,6 +189,6 @@ func main() {
 	case *show_help, text == "":
 		print_help()
 	default:
-		render(text)
+		render(text, *prefix_flag, *postfix_flag)
 	}
 }
