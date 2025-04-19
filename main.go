@@ -16,13 +16,17 @@ var version = "0.1.0"
 func render(input string) {
 	lines := []string{"", ""}
 	input = strings.ToLower(input)
-	for _, r := range input {
+	for i, r := range input {
 		glyph, ok := font[r]
 		if !ok {
 			continue
 		}
-		lines[0] += glyph[0] + " "
-		lines[1] += glyph[1] + " "
+		lines[0] += glyph[0]
+		lines[1] += glyph[1]
+		if i != len(input)-1 {
+			lines[0] += " "
+			lines[1] += " "
+		}
 	}
 	fmt.Println(lines[0])
 	fmt.Println(lines[1])
