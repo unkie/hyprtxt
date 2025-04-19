@@ -92,9 +92,8 @@ func print_examples() {
 	}
 }
 
-
 func print_flf() {
-	var charset = []rune {
+	charset := []rune{
 		' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-',
 		'.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';',
 		'<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
@@ -110,7 +109,7 @@ func print_flf() {
 	fmt.Println("")
 	fmt.Println("FIGFont created with: https://github.com/unkie/hyprtxt")
 	for _, i := range charset {
-		var r = unicode.ToLower (rune(i))
+		r := unicode.ToLower(rune(i))
 		g, ok := font[r]
 		if !ok {
 			g = []string{"", ""}
@@ -119,9 +118,9 @@ func print_flf() {
 			g = []string{"\u2003", "\u2003"}
 		}
 		fmt.Printf("%s@\n%s@\n%s@\n%s@@\n",
-		g[0], g[1],
-		strings.Repeat(" ", utf8.RuneCountInString(g[0])),
-		strings.Repeat(" ", utf8.RuneCountInString(g[0])))
+			g[0], g[1],
+			strings.Repeat(" ", utf8.RuneCountInString(g[0])),
+			strings.Repeat(" ", utf8.RuneCountInString(g[0])))
 	}
 }
 
