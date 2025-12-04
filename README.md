@@ -1,4 +1,7 @@
-# hyprtxt
+```txt
+█░█ █▄█ █▀█ █▀█ ▀█▀ ▀▄█ ▀█▀
+█▀█ ░█░ █▀▀ █▀▄ ░█░ █▀▄ ░█░
+```
 
 A minimalistic CLI tool to render text to the console using a custom 'hyprfont' figlet font.
 
@@ -35,9 +38,15 @@ hyprtxt [options] [text]
 ## Examples
 
 ```sh
-hyprtxt hello world
-hyprtxt -missing "{ oh no !¡}"
-hyprtxt -figlet > hyprfont.flf
+% hyprtxt "hello world"
+█░█ █▀▀ █░░ █░░ █▀█   █░▄░█ █▀█ █▀█ █░░ █▀▄
+█▀█ ██▄ █▄▄ █▄▄ █▄█   ▀▄▀▄▀ █▄█ █▀▄ █▄▄ █▄▀
+
+% hyprtxt -missing "{ oh no !¡}"
+Unsupported characters:
+{, ¡, }
+
+% hyprtxt -figlet > hyprfont.flf
 ```
 
 ---
