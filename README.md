@@ -49,6 +49,9 @@ Unsupported characters:
 % hyprtxt -figlet > hyprfont.flf
 ```
 
+Screenshot. Font is [FiraCode Nerd Font Mono](https://github.com/tonsky/FiraCode).
+<img src="hyprtxt.png" alt="Screenshot" width="800">
+
 ---
 
 ## Development
