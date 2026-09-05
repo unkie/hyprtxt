@@ -4,7 +4,7 @@ GO_LDFLAGS = -X main.version=$(VERSION)
 GO_BUILD_FLAGS ?=
 PREFIX ?= /usr/local
 
-.PHONY: build install run clean fmt
+.PHONY: build install run clean fmt test
 
 build:
 	go build $(GO_BUILD_FLAGS) -ldflags "$(GO_LDFLAGS)" -o $(APP) .
@@ -27,3 +27,5 @@ clean:
 fmt:
 	gofmt -w *.go
 
+test:
+	go test ./...
