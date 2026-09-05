@@ -1,0 +1,36 @@
+# Maintainer: Mark Pustjens <pustjens@dds.nl>
+
+pkgname=hyprtxt
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Minimal CLI for rendering text with a custom two-row font"
+url="https://github.com/unkie/hyprtxt"
+license=('MIT')
+arch=('x86_64' 'aarch64')
+makedepends=('git' 'go')
+source=("hyprtxt-src::git+https://github.com/unkie/hyprtxt.git#tag=v$pkgver")
+
+build() {
+	cd "$srcdir/hyprtxt-src"
+	local version
+	version="$(git describe --tags --always --dirty)"
+	go build -trimpath -ldflags="-X main.version=$version" -o hyprtxt .
+}
+
+check() {
+	cd "$srcdir/hyprtxt-src"
+	go test ./...
+}
+
+package() {
+	cd "$srcdir/hyprtxt-src"
+	install -Dm755 hyprtxt "$pkgdir"/usr/bin/hyprtxt
+	install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+	install -Dm644 completions/hyprtxt.bash \
+		"$pkgdir/usr/share/bash-completion/completions/hyprtxt"
+	install -Dm644 completions/_hyprtxt \
+		"$pkgdir/usr/share/zsh/site-functions/_hyprtxt"
+}
+
+sha512sums=('SKIP')
