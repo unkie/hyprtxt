@@ -12,25 +12,17 @@ source=("hyprtxt-src::git+https://github.com/unkie/hyprtxt.git#tag=v$pkgver")
 
 build() {
 	cd "$srcdir/hyprtxt-src"
-	local version
-	version="$(git describe --tags --always --dirty)"
-	go build -trimpath -ldflags="-X main.version=$version" -o hyprtxt .
+	make GO_BUILD_FLAGS=-trimpath build
 }
 
 check() {
 	cd "$srcdir/hyprtxt-src"
-	go test ./...
+	make test
 }
 
 package() {
 	cd "$srcdir/hyprtxt-src"
-	install -Dm755 hyprtxt "$pkgdir"/usr/bin/hyprtxt
-	install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
-	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-	install -Dm644 completions/hyprtxt.bash \
-		"$pkgdir/usr/share/bash-completion/completions/hyprtxt"
-	install -Dm644 completions/_hyprtxt \
-		"$pkgdir/usr/share/zsh/site-functions/_hyprtxt"
+	make GO_BUILD_FLAGS=-trimpath PREFIX=/usr DESTDIR="$pkgdir" install
 }
 
 sha512sums=('SKIP')
