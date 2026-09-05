@@ -52,7 +52,7 @@ hyprtxt [options] [text]
 Unsupported characters:
 {, ¡, }
 
-% hyprtxt --figlet > hyprfont.flf
+% hyprtxt --figlet > hyprtxt.flf
 ```
 
 Screenshot. Font is [FiraCode Nerd Font Mono](https://github.com/tonsky/FiraCode).
