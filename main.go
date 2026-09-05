@@ -4,6 +4,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"runtime/debug"
 	"sort"
 	"strings"
 	"unicode"
@@ -12,7 +14,17 @@ import (
 	"github.com/spf13/pflag"
 )
 
-var version = "0.1.0"
+var version = "devel"
+
+func get_build_version() string {
+	if version != "devel" {
+		return version
+	}
+	if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" && info.Main.Version != "(devel)" {
+		return info.Main.Version
+	}
+	return version
+}
 
 func get_text(input string, prefix string, postfix string) []string {
 	lines := []string{prefix, prefix}
@@ -212,7 +224,7 @@ func main() {
 	case options.show_examples:
 		print_examples()
 	case options.show_version:
-		fmt.Println("hyprtxt version", version)
+		fmt.Println("hyprtxt version", get_build_version())
 	case options.show_help, text == "":
 		print_help()
 	default:
