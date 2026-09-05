@@ -1,6 +1,6 @@
 package main
 
-var font_hprtxt = map[rune][]string {
+var font_hprtxt = map[rune][]string{
 	' ': {
 		" ",
 		" ",
