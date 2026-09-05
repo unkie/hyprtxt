@@ -3,12 +3,13 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"sort"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/spf13/pflag"
 )
 
 var version = "0.1.0"
@@ -137,6 +138,36 @@ func sorted_keys(m map[rune][]string) []rune {
 	return keys
 }
 
+type cli_options struct {
+	prefix        string
+	postfix       string
+	show_flf      bool
+	show_missing  bool
+	show_charset  bool
+	show_examples bool
+	show_version  bool
+	show_help     bool
+}
+
+func parse_options(args []string) (cli_options, []string, error) {
+	var options cli_options
+	flags := pflag.NewFlagSet("hyprtxt", pflag.ContinueOnError)
+	flags.SetInterspersed(false)
+	flags.StringVarP(&options.prefix, "prefix", "p", "", "")
+	flags.StringVarP(&options.postfix, "postfix", "P", "", "")
+	flags.BoolVarP(&options.show_flf, "figlet", "f", false, "")
+	flags.BoolVarP(&options.show_missing, "missing", "m", false, "")
+	flags.BoolVarP(&options.show_charset, "charset", "c", false, "")
+	flags.BoolVarP(&options.show_examples, "examples", "e", false, "")
+	flags.BoolVarP(&options.show_version, "version", "v", false, "")
+	flags.BoolVarP(&options.show_help, "help", "h", false, "")
+
+	if err := flags.Parse(args); err != nil {
+		return cli_options{}, nil, err
+	}
+	return options, flags.Args(), nil
+}
+
 func print_help() {
 	fmt.Println(`Usage: hyprtxt [options] [text]
 
@@ -145,53 +176,46 @@ hyprfont font. All input is converted to lowercase.
 Unsupported characters are omitted in the output.
 
 Options:
-	-prefix <text>
+	-p, --prefix <text>
 		Prefix each output line.
-	-postfix <text>
+	-P, --postfix <text>
 		Postfix each output line.
-	-figlet
+	-f, --figlet
 		Output font in figlet .flf format
-	-missing
+	-m, --missing
 		Show unsupported characters in input
-	-charset
+	-c, --charset
 		Print the supported character in ASCII
-	-examples
+	-e, --examples
 		Print the supported characters in hyprfont
-	-version
+	-v, --version
 		Show version info
-	-help
+	-h, --help
 		Show this help`)
 }
 
 func main() {
-	prefix_flag := flag.String("prefix", "", "")
-	postfix_flag := flag.String("postfix", "", "")
-	show_flf := flag.Bool("figlet", false, "")
-	show_missing := flag.Bool("missing", false, "")
-	show_charset := flag.Bool("charset", false, "")
-	show_examples := flag.Bool("examples", false, "")
-	show_version := flag.Bool("version", false, "")
-	show_help := flag.Bool("help", false, "")
-	flag.Usage = print_help
-	flag.Parse()
-
-	args := flag.Args()
+	options, args, err := parse_options(os.Args[1:])
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "hyprtxt:", err)
+		os.Exit(2)
+	}
 	text := strings.ToLower(strings.Join(args, " "))
 
 	switch {
-	case *show_flf:
+	case options.show_flf:
 		print_flf()
-	case *show_missing:
+	case options.show_missing:
 		check_missing(text)
-	case *show_charset:
+	case options.show_charset:
 		print_charset()
-	case *show_examples:
+	case options.show_examples:
 		print_examples()
-	case *show_version:
+	case options.show_version:
 		fmt.Println("hyprtxt version", version)
-	case *show_help, text == "":
+	case options.show_help, text == "":
 		print_help()
 	default:
-		render(text, *prefix_flag, *postfix_flag)
+		render(text, options.prefix, options.postfix)
 	}
 }

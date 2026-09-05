@@ -15,7 +15,7 @@ A minimalistic CLI tool to render text to the console using a custom 'hyprfont' 
 - Show a gallery of the characters supported by the font.
 
 Input is converted to lowercase before rendering.
-Unsupported characters are omitted. Use `-missing` to identify them.
+Unsupported characters are omitted. Use `--missing` to identify them.
 
 ---
 
@@ -27,16 +27,16 @@ hyprtxt [options] [text]
 
 ### Options
 
-| Flag        | Description                                    |
-|-------------|------------------------------------------------|
-| `-prefix`   | Prefix each output line                        |
-| `-postfix`  | Postfix each output line                       |
-| `-figlet`   | Output the embedded font in figlet format      |
-| `-missing`  | Show unsupported characters in the input       |
-| `-charset`  | Print supported character set                  |
-| `-examples` | Print all characters as a glyph gallery        |
-| `-version`  | Show version info                              |
-| `-help`     | Show help message                              |
+| Flags              | Description                                    |
+|--------------------|------------------------------------------------|
+| `-p`, `--prefix`   | Prefix each output line                        |
+| `-P`, `--postfix`  | Postfix each output line                       |
+| `-f`, `--figlet`   | Output the embedded font in figlet format      |
+| `-m`, `--missing`  | Show unsupported characters in the input       |
+| `-c`, `--charset`  | Print supported character set                  |
+| `-e`, `--examples` | Print all characters as a glyph gallery        |
+| `-v`, `--version`  | Show version info                              |
+| `-h`, `--help`     | Show help message                              |
 
 ---
 
@@ -47,11 +47,11 @@ hyprtxt [options] [text]
 █░█ █▀▀ █░░ █░░ █▀█   █░▄░█ █▀█ █▀█ █░░ █▀▄
 █▀█ ██▄ █▄▄ █▄▄ █▄█   ▀▄▀▄▀ █▄█ █▀▄ █▄▄ █▄▀
 
-% hyprtxt -missing "{ oh no !¡}"
+% hyprtxt --missing "{ oh no !¡}"
 Unsupported characters:
 {, ¡, }
 
-% hyprtxt -figlet > hyprfont.flf
+% hyprtxt --figlet > hyprfont.flf
 ```
 
 Screenshot. Font is [FiraCode Nerd Font Mono](https://github.com/tonsky/FiraCode).
