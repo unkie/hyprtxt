@@ -1,7 +1,7 @@
 # Maintainer: Mark Pustjens <pustjens@dds.nl>
 
 pkgname=hyprtxt
-pkgver=1.0.0
+pkgver=1.0.1
 pkgrel=1
 pkgdesc="Minimal CLI for rendering text with a custom two-row font"
 url="https://github.com/unkie/hyprtxt"
