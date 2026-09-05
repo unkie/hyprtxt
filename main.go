@@ -16,6 +16,16 @@ import (
 
 var version = "devel"
 
+type font_definition struct {
+	height int
+	glyphs map[rune][]string
+}
+
+var available_fonts = map[string]font_definition{
+	"hyprtxt": {height: 2, glyphs: font_hprtxt},
+	"hyprblk": {height: 4, glyphs: font_hyprblk},
+}
+
 func get_build_version() string {
 	if version != "devel" {
 		return version
@@ -26,38 +36,44 @@ func get_build_version() string {
 	return version
 }
 
-func get_text(input string, prefix string, postfix string) []string {
-	lines := []string{prefix, prefix}
+func get_text(input string, prefix string, postfix string, selected_font font_definition) []string {
+	lines := make([]string, selected_font.height)
+	for i := range lines {
+		lines[i] = prefix
+	}
 	first := true
 	for _, r := range input {
-		glyph, ok := font[r]
+		glyph, ok := selected_font.glyphs[r]
 		if !ok {
 			continue
 		}
 		if !first {
-			lines[0] += " "
-			lines[1] += " "
+			for i := range lines {
+				lines[i] += " "
+			}
 		}
-		lines[0] += glyph[0]
-		lines[1] += glyph[1]
+		for i := range lines {
+			lines[i] += glyph[i]
+		}
 		first = false
 	}
-	lines[0] += postfix
-	lines[1] += postfix
+	for i := range lines {
+		lines[i] += postfix
+	}
 
 	return lines
 }
 
-func render(input string, prefix string, postfix string) {
-	lines := get_text(input, prefix, postfix)
-	fmt.Println(lines[0])
-	fmt.Println(lines[1])
+func render(input string, prefix string, postfix string, selected_font font_definition) {
+	for _, line := range get_text(input, prefix, postfix, selected_font) {
+		fmt.Println(line)
+	}
 }
 
-func check_missing(input string) {
+func check_missing(input string, selected_font font_definition) {
 	var missing []string
 	for _, r := range input {
-		if _, ok := font[r]; !ok {
+		if _, ok := selected_font.glyphs[r]; !ok {
 			missing = append(missing, fmt.Sprintf("%c", r))
 		}
 	}
@@ -69,9 +85,9 @@ func check_missing(input string) {
 	fmt.Println(strings.Join(missing, ", "))
 }
 
-func print_charset() {
-	keys := make([]rune, 0, len(font))
-	for r := range font {
+func print_charset(selected_font font_definition) {
+	keys := make([]rune, 0, len(selected_font.glyphs))
+	for r := range selected_font.glyphs {
 		keys = append(keys, r)
 	}
 	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
@@ -81,38 +97,40 @@ func print_charset() {
 	fmt.Println()
 }
 
-func print_examples() {
-	keys := sorted_keys(font)
+func print_examples(selected_font font_definition) {
+	keys := sorted_keys(selected_font.glyphs)
 	for i := 0; i < len(keys); i += 16 {
 		end := i + 16
 		if end > len(keys) {
 			end = len(keys)
 		}
 		label := ""
-		line1 := ""
-		line2 := ""
+		lines := make([]string, selected_font.height)
 		for j, r := range keys[i:end] {
-			glyph := font[r]
+			glyph := selected_font.glyphs[r]
 			if r == ' ' {
 				r = '⎵'
 			}
 			label += fmt.Sprintf("%c%s", r, strings.Repeat(" ", utf8.RuneCountInString(glyph[0])-1))
-			line1 += glyph[0]
-			line2 += glyph[1]
-			if j != 15 {
-				line1 += "  "
-				line2 += "  "
+			for row := range lines {
+				lines[row] += glyph[row]
+			}
+			if j != end-i-1 {
+				for row := range lines {
+					lines[row] += "  "
+				}
 				label += "  "
 			}
 		}
 		fmt.Println(label)
-		fmt.Println(line1)
-		fmt.Println(line2)
+		for _, line := range lines {
+			fmt.Println(line)
+		}
 		fmt.Println()
 	}
 }
 
-func print_flf() {
+func print_flf(selected_font font_definition) {
 	charset := []rune{
 		' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-',
 		'.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';',
@@ -124,20 +142,38 @@ func print_flf() {
 		'ä', 'ö', 'ü', 'ß',
 	}
 
-	fmt.Println("flf2a$ 2 2 8 0 3 0 64 0")
+	max_length := 0
+	for _, glyph := range selected_font.glyphs {
+		for _, line := range glyph {
+			length := utf8.RuneCountInString(line) + 3
+			if length > max_length {
+				max_length = length
+			}
+		}
+	}
+	fmt.Printf("flf2a$ %d %d %d 0 3 0 64 0\n", selected_font.height, selected_font.height, max_length)
 	fmt.Println("Font Author: Mark Pustjens")
 	fmt.Println("")
 	fmt.Println("FIGFont created with: https://github.com/unkie/hyprtxt")
 	for _, i := range charset {
 		r := unicode.ToLower(rune(i))
-		g, ok := font[r]
+		g, ok := selected_font.glyphs[r]
 		if !ok {
-			g = []string{"", ""}
+			g = make([]string, selected_font.height)
 		}
 		if r == ' ' {
-			g = []string{"$", "$"}
+			g = make([]string, selected_font.height)
+			for row := range g {
+				g[row] = "$"
+			}
 		}
-		fmt.Printf("%s$@\n%s$@@\n", g[0], g[1])
+		for row, line := range g {
+			endmark := "@"
+			if row == len(g)-1 {
+				endmark = "@@"
+			}
+			fmt.Printf("%s$%s\n", line, endmark)
+		}
 	}
 }
 
@@ -153,6 +189,7 @@ func sorted_keys(m map[rune][]string) []rune {
 type cli_options struct {
 	prefix        string
 	postfix       string
+	font_name     string
 	show_flf      bool
 	show_missing  bool
 	show_charset  bool
@@ -167,6 +204,7 @@ func parse_options(args []string) (cli_options, []string, error) {
 	flags.SetInterspersed(false)
 	flags.StringVarP(&options.prefix, "prefix", "p", "", "")
 	flags.StringVarP(&options.postfix, "postfix", "P", "", "")
+	flags.StringVarP(&options.font_name, "font", "F", "hyprtxt", "")
 	flags.BoolVarP(&options.show_flf, "figlet", "f", false, "")
 	flags.BoolVarP(&options.show_missing, "missing", "m", false, "")
 	flags.BoolVarP(&options.show_charset, "charset", "c", false, "")
@@ -183,8 +221,8 @@ func parse_options(args []string) (cli_options, []string, error) {
 func print_help() {
 	fmt.Println(`Usage: hyprtxt [options] [text]
 
-When used without options, outputs the text with the 2-line
-hyprfont font. All input is converted to lowercase.
+When used without an action option, renders text with the selected
+font. The default font is hyprtxt. All input is converted to lowercase.
 Unsupported characters are omitted in the output.
 
 Options:
@@ -192,6 +230,8 @@ Options:
 		Prefix each output line.
 	-P, --postfix <text>
 		Postfix each output line.
+	-F, --font <name>
+		Select font: hyprtxt or hyprblk.
 	-f, --figlet
 		Output font in figlet .flf format
 	-m, --missing
@@ -199,7 +239,7 @@ Options:
 	-c, --charset
 		Print the supported character in ASCII
 	-e, --examples
-		Print the supported characters in hyprfont
+		Print the selected font's supported characters
 	-v, --version
 		Show version info
 	-h, --help
@@ -213,21 +253,26 @@ func main() {
 		os.Exit(2)
 	}
 	text := strings.ToLower(strings.Join(args, " "))
+	selected_font, ok := available_fonts[options.font_name]
+	if !ok {
+		fmt.Fprintf(os.Stderr, "hyprtxt: unknown font %q (available: hyprtxt, hyprblk)\n", options.font_name)
+		os.Exit(2)
+	}
 
 	switch {
 	case options.show_flf:
-		print_flf()
+		print_flf(selected_font)
 	case options.show_missing:
-		check_missing(text)
+		check_missing(text, selected_font)
 	case options.show_charset:
-		print_charset()
+		print_charset(selected_font)
 	case options.show_examples:
-		print_examples()
+		print_examples(selected_font)
 	case options.show_version:
 		fmt.Println("hyprtxt version", get_build_version())
 	case options.show_help, text == "":
 		print_help()
 	default:
-		render(text, options.prefix, options.postfix)
+		render(text, options.prefix, options.postfix, selected_font)
 	}
 }

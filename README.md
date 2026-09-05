@@ -3,13 +3,13 @@
 █▀█ ░█░ █▀▀ █▀▄ ░█░ █▀▄ ░█░
 ```
 
-A minimalistic CLI tool to render text to the console using a custom 'hyprfont' figlet font.
+A minimalistic CLI tool to render text to the console using custom hyprtxt fonts.
 
 ---
 
 ## Features
 
-- Render supported text in a 2-row Unicode block font.
+- Render supported text using a compact 2-row or display 4-row Unicode block font.
 - Output the font as a figlet `.flf` file.
 - Check if any characters in the input are missing from the font.
 - Show a gallery of the characters supported by the font.
@@ -31,6 +31,7 @@ hyprtxt [options] [text]
 |--------------------|------------------------------------------------|
 | `-p`, `--prefix`   | Prefix each output line                        |
 | `-P`, `--postfix`  | Postfix each output line                       |
+| `-F`, `--font`     | Select `hyprtxt` (default) or `hyprblk`         |
 | `-f`, `--figlet`   | Output the embedded font in figlet format      |
 | `-m`, `--missing`  | Show unsupported characters in the input       |
 | `-c`, `--charset`  | Print supported character set                  |

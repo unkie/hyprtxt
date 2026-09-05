@@ -3,10 +3,11 @@
 _arguments -S -A '-*' \
   '(-p --prefix)'{-p,--prefix}'[Prefix each output line]:prefix text:' \
   '(-P --postfix)'{-P,--postfix}'[Postfix each output line]:postfix text:' \
+  '(-F --font)'{-F,--font}'[Select the font]:font:(hyprtxt hyprblk)' \
   '(-f --figlet)'{-f,--figlet}'[Output the font in FIGlet .flf format]' \
   '(-m --missing)'{-m,--missing}'[Show unsupported characters in input]' \
   '(-c --charset)'{-c,--charset}'[Print the supported characters in ASCII]' \
-  '(-e --examples)'{-e,--examples}'[Print the supported characters in hyprfont]' \
+  '(-e --examples)'{-e,--examples}'[Print the selected font characters]' \
   '(-v --version)'{-v,--version}'[Show version information]' \
   '(-h --help)'{-h,--help}'[Show help]' \
   '*:text:'
