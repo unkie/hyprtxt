@@ -1,6 +1,6 @@
 package main
 
-var font = map[rune][]string {
+var font_hprtxt = map[rune][]string {
 	' ': {
 		" ",
 		" ",
@@ -222,4 +222,3 @@ var font = map[rune][]string {
 		"█",
 	},
 }
-
