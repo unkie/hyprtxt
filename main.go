@@ -138,7 +138,7 @@ func sorted_keys(m map[rune][]string) []rune {
 }
 
 func print_help() {
-	fmt.Println(`Usage: hyprtext [options] [text]
+	fmt.Println(`Usage: hyprtxt [options] [text]
 
 When used without options, outputs the text with the 2-line
 hyprfont font. All input is converted to lowercase.
