@@ -9,10 +9,13 @@ A minimalistic CLI tool to render text to the console using a custom 'hyprfont' 
 
 ## Features
 
-- Render any text in a 2-line ASCII font.
+- Render supported text in a 2-row Unicode block font.
 - Output the font as a figlet `.flf` file.
 - Check if any characters in the input are missing from the font.
 - Show a gallery of the characters supported by the font.
+
+Input is converted to lowercase before rendering.
+Unsupported characters are omitted. Use `-missing` to identify them.
 
 ---
 
@@ -26,6 +29,8 @@ hyprtxt [options] [text]
 
 | Flag        | Description                                    |
 |-------------|------------------------------------------------|
+| `-prefix`   | Prefix each output line                        |
+| `-postfix`  | Postfix each output line                       |
 | `-figlet`   | Output the embedded font in figlet format      |
 | `-missing`  | Show unsupported characters in the input       |
 | `-charset`  | Print supported character set                  |
