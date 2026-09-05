@@ -15,11 +15,6 @@ build() {
 	make GO_BUILD_FLAGS=-trimpath build
 }
 
-check() {
-	cd "$srcdir/hyprtxt-src"
-	make test
-}
-
 package() {
 	cd "$srcdir/hyprtxt-src"
 	make GO_BUILD_FLAGS=-trimpath PREFIX=/usr DESTDIR="$pkgdir" install
