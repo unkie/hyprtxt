@@ -15,17 +15,19 @@ var version = "0.1.0"
 
 func get_text(input string, prefix string, postfix string) []string {
 	lines := []string{prefix, prefix}
-	for i, r := range input {
+	first := true
+	for _, r := range input {
 		glyph, ok := font[r]
 		if !ok {
 			continue
 		}
-		lines[0] += glyph[0]
-		lines[1] += glyph[1]
-		if i != len(input)-1 {
+		if !first {
 			lines[0] += " "
 			lines[1] += " "
 		}
+		lines[0] += glyph[0]
+		lines[1] += glyph[1]
+		first = false
 	}
 	lines[0] += postfix
 	lines[1] += postfix
