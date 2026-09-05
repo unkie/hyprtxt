@@ -111,7 +111,7 @@ func print_flf() {
 		'ä', 'ö', 'ü', 'ß',
 	}
 
-	fmt.Println("flf2a$ 4 3 7 0 3 0 64 0")
+	fmt.Println("flf2a$ 2 2 8 0 3 0 64 0")
 	fmt.Println("Font Author: Mark Pustjens")
 	fmt.Println("")
 	fmt.Println("FIGFont created with: https://github.com/unkie/hyprtxt")
@@ -122,12 +122,9 @@ func print_flf() {
 			g = []string{"", ""}
 		}
 		if r == ' ' {
-			g = []string{"\u2003", "\u2003"}
+			g = []string{"$", "$"}
 		}
-		fmt.Printf("%s@\n%s@\n%s@\n%s@@\n",
-			g[0], g[1],
-			strings.Repeat(" ", utf8.RuneCountInString(g[0])),
-			strings.Repeat(" ", utf8.RuneCountInString(g[0])))
+		fmt.Printf("%s$@\n%s$@@\n", g[0], g[1])
 	}
 }
 
