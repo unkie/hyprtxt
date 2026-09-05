@@ -15,7 +15,6 @@ var version = "0.1.0"
 
 func get_text(input string, prefix string, postfix string) []string {
 	lines := []string{prefix, prefix}
-	input = strings.ToLower(input)
 	for i, r := range input {
 		glyph, ok := font[r]
 		if !ok {
@@ -178,7 +177,7 @@ func main() {
 	flag.Parse()
 
 	args := flag.Args()
-	text := strings.Join(args, "")
+	text := strings.ToLower(strings.Join(args, " "))
 
 	switch {
 	case *show_flf:
