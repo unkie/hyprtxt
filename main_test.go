@@ -150,6 +150,16 @@ func TestHyprblkFontSupportsHyprtxtCharset(t *testing.T) {
 	}
 }
 
+func TestHyprblkFirstPixelRowIsEmpty(t *testing.T) {
+	for r, glyph := range font_hyprblk {
+		for column, cell := range []rune(glyph[0]) {
+			if cell == '█' || cell == '▀' {
+				t.Errorf("hyprblk %q uses first pixel row at column %d", r, column)
+			}
+		}
+	}
+}
+
 func TestParseFontOption(t *testing.T) {
 	options, args, err := parse_options([]string{"--font", "hyprblk", "-b", "opencode"})
 	if err != nil {
