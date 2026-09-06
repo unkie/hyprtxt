@@ -32,6 +32,7 @@ hyprtxt [options] [text]
 | `-p`, `--prefix`   | Prefix each output line                        |
 | `-P`, `--postfix`  | Postfix each output line                       |
 | `-F`, `--font`     | Select `hyprtxt` (default) or `hyprblk`         |
+| `-b`, `--background` | Add a darker background to `hyprblk`         |
 | `-f`, `--figlet`   | Output the embedded font in figlet format      |
 | `-m`, `--missing`  | Show unsupported characters in the input       |
 | `-c`, `--charset`  | Print supported character set                  |
@@ -79,4 +80,3 @@ make run ARGS="hello world"
 ## License
 
 MIT © 2025 [Mark Pustjens](mailto:pustjens@dds.nl)
-

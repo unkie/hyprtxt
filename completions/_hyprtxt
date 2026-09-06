@@ -4,6 +4,7 @@ _arguments -S -A '-*' \
   '(-p --prefix)'{-p,--prefix}'[Prefix each output line]:prefix text:' \
   '(-P --postfix)'{-P,--postfix}'[Postfix each output line]:postfix text:' \
   '(-F --font)'{-F,--font}'[Select the font]:font:(hyprtxt hyprblk)' \
+  '(-b --background)'{-b,--background}'[Add a darker background to the hyprblk font]' \
   '(-f --figlet)'{-f,--figlet}'[Output the font in FIGlet .flf format]' \
   '(-m --missing)'{-m,--missing}'[Show unsupported characters in input]' \
   '(-c --charset)'{-c,--charset}'[Print the supported characters in ASCII]' \

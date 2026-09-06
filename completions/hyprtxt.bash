@@ -12,7 +12,7 @@ _hyprtxt() {
 	if ((COMP_CWORD > 0)); then
 		prev="${COMP_WORDS[COMP_CWORD-1]}"
 	fi
-	opts="-p --prefix -P --postfix -F --font -f --figlet -m --missing -c --charset -e --examples -v --version -h --help"
+	opts="-p --prefix -P --postfix -F --font -b --background -f --figlet -m --missing -c --charset -e --examples -v --version -h --help"
 	COMPREPLY=()
 
 	case "$prev" in
